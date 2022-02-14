@@ -69,8 +69,8 @@ export default {
 y estamos usando la clave 2 (literal, se puede definir como cadena también), para decirle que use el segundo origen de datos.
 Cuando implementemos uno nuevo, o lo queramos cambiar, simplemente cambiamos este valor.
 
-Para todas las factorías que implementen el modelo anteriormente descrito, esto es usable, y se puede, de esta forma, inyectar nuevos módulos de forma que no haya que tocar
-apenas nada de código en las clases que vayan a usar lo que devuelven las factorías, ni tampoco en las factorías en si mismas.
+Para todas las factorías que implementen el modelo anteriormente descrito, esto es usable, y se puede, de esta forma, inyectar nuevos módulos de forma que no haya que tocar nada de código en las clases que vayan a usar lo que devuelven las factorías, ni tampoco en las factorías en si mismas, pues los objetos se conforman a la interfaz fuertemente
+tipada, y por tanto, su lógica interna es irrelevante desde el punto de vista de quien lo use.
 
 
 ## Rutas aplicación
