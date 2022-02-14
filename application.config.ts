@@ -3,5 +3,5 @@ import { paymentGatewayDataOriginsKeys } from "./src/repository/payment-gateway/
 export default {
     port: 8000,
     dev: true,
-    dataOrigin: <paymentGatewayDataOriginsKeys>2
+    dataOrigin: <paymentGatewayDataOriginsKeys>2    
 }
