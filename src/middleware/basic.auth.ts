@@ -4,11 +4,9 @@ Tambien debería ir por cada ruta en particular, quizás algunas requieran heade
 */
 import express from 'express';
 
-export function basicAuthMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) : void {
-    if(!req.headers.authorization) {
-        res.status(404).json({ "forbidden": true });
-    } else if (req.headers.authorization !== '1234') {
-        res.status(404).json({ "wrong_header_value": true });
+export function basicAuthMiddleware(req: express.Request, res: express.Response, next: express.NextFunction): express.Response | undefined {
+    if (!req.headers.authorization || req.headers.authorization !== '1234') {
+        return res.status(403).json({ "forbidden": true });
     }
     next();
 }

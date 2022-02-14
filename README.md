@@ -100,11 +100,13 @@ Enviamos:
 Recibimos:
 
 ```
+Status Code: 200
 {
     "amount": 1212,
     "completed": true
 }
 ```
+
 
 - POST /reimbursement
 
@@ -124,9 +126,28 @@ Enviamos:
 Recibimos:
 
 ```
+Status Code: 200
 {
     "amount": 1212,
     "completed": true
+}
+```
+
+Si no se les pasa correctamente el cuerpo, devuelven:
+
+```
+Status Code: 400
+{
+    "invalid": true
+}
+```
+
+Y en el caso de que no se les pase bien el token de autentificación en las cabeceras de la petición:
+
+```
+Status Code: 403
+{
+    "forbidden": true
 }
 ```
 
