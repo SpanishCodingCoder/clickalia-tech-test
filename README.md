@@ -75,7 +75,12 @@ apenas nada de código en las clases que vayan a usar lo que devuelven las facto
 
 ## Rutas aplicación
 
-Para todas las rutas es requerido un header de autentificación: Authentication 1234
+Para todas las rutas es requerido un header de autentificación: 
+
+```
+Authentication: 1234
+```
+
 Esto emula lo que en producción sería una auténtica securización de los endpoints.
 
 - POST /payment
