@@ -159,5 +159,4 @@ creo que es suficiente (espero, al menos)
 
 ## Contacto
 
-Si hay cualquier duda o algo no se entience, mandadme un correo a aalmunia@gmail.com 
-¡¡ Gracias !!
+Si hay cualquier duda o algo no se entience, mandadme un correo ¡¡ Gracias !!
