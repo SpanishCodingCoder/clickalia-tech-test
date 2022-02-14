@@ -41,7 +41,7 @@ La solución a tener diferentes orígienes de datos e integrarlos de forma senci
 - Se define una interfaz /model/payment-gateway.origin.interface.ts
 - Todos los orígenes de datos en /model/payment-gateway/origins heredan de la clase base PaymentGatewayBase, a la que se le inyecta el objeto de servicio,
 para la gestión de lógica de negocio. Este servicio, de momento es DUMMY, pero en un entorno real, debería salir de una factoría que lo genere en función del origen de datos que se vaya a usar.
-- Una factoría agnóstica: 
+- Una factoría agnóstica (no sabe qué objetos instancia, no es un MEGA-SWITCH): 
    - /repository/payment-gateway/payment-gateway.origin.types.ts - Define los tipos, aquí se importan los nuevos orígenes de datos
    - /repository/payment-gateway/payment-gateway.factory.ts - Factoría que genera los orígenes de datos
 - Un fichero de configuración:
