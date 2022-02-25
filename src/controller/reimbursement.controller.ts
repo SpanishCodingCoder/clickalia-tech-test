@@ -28,7 +28,7 @@ export default class ReimbursementController implements Controller {
         if(!this.validate(request)) {
             res.status(400).json({"invalid": true});
         } else {
-            const payCompleted = this.payGate.pay(request.body);
+            const payCompleted = this.payGate.reimburse(request.body);
             res.status(200).json(payCompleted);
         }
     }

@@ -1,60 +1,61 @@
-# Test técnico Clikalia
+# Tech test
 
-## Comandos de instalación / test
+## Installation / running commands
 
-Para instalar dependencias
+To install dependencies
 
 ```
 npm install
 ```
 
-Para ejecutar en modo hot reload
+For hot reload running of code
 
 ```
 nodemon / npm run dev
 ```
 
-Para correr los tests
+For running tests
 
 ```
 npm run test
 ```
 
-## Explicación de arquitectura / componentes
+## Architecure / component explanation
 
-La aplicación está escrita en Typescript, usando Express como librería principal.
+The app is written in Typescript, using Express as the main library
 
-Está dividida en las siguientes carpetas:
+The folders are as follows:
 
-- controller: Contiene los controladores de las rutas
-- middleware: Contiene un muy básico sistema de autentificación como middleware de express
-- model: Contiene las interfaces de los modelos Payment y Reimbursement
-- repository/payment-gateway: Contiene los orígenes de datos de la entidad PaymentGateway, así como sus definiciones de tipos e interfaz
-- service: Contiene servicios dummy (están vacíos, pero inyectados) que se usaría para la lógica de negocio
-- tools: Contiene exportaciones que vamos a usar en la aplicación en general, así como cualquier clase / función / tipo que queramos tener en el "cajón de sastre"
-- test: Contiene los tests de la aplicacion (usa jest)
+- controller: Contains the route controllers
+- middleware: Contains a very basic authentication system as express middleware
+- model: Contains the interfaces of the Payment and Reimbursement entities
+- repository/payment-gateway: Contains the data origins for the PaymentGateway entity, as well as its type and interface definitions
+- service: Contains dummy services (empty, unimplemented, but injected as DI), that would eventually be used for business logic
+- tools: Contains exports that we need in the app, as well as any miscellaneous tool
+- test: Contains the application tests (uses jest)
 
-Asumimos por origen de datos el proveedor último de pagos / reembolsos, por ejemplo VISA, Bizum, etc...
+As data origin, we assume the ultimate payment provider, i.e: VISA, Bizum, etc...
 
-La solución a tener diferentes orígienes de datos e integrarlos de forma sencilla es tener la siguiente arquitectura:
 
-- Se define una interfaz /model/payment-gateway.origin.interface.ts
-- Todos los orígenes de datos en /model/payment-gateway/origins heredan de la clase base PaymentGatewayBase, a la que se le inyecta el objeto de servicio,
-para la gestión de lógica de negocio. Este servicio, de momento es DUMMY, pero en un entorno real, debería salir de una factoría que lo genere en función del origen de datos que se vaya a usar.
-- Una factoría agnóstica (no sabe qué objetos instancia, no es un MEGA-SWITCH): 
-   - /repository/payment-gateway/payment-gateway.origin.types.ts - Define los tipos, aquí se importan los nuevos orígenes de datos
-   - /repository/payment-gateway/payment-gateway.factory.ts - Factoría que genera los orígenes de datos
-- Un fichero de configuración:
+The solution to have several data origins and integrate them in an easy was is to have the following architecture:
+
+- Define an interface in /model/payment-gateway.origin.interface.ts
+
+- All data origins in /model/payment-gateway/origins inherit from base class PaymentGatewayBase, to which the service object is injected for the handling of business logic. This service is dummy as of now, but in a real env, it should come out of a factory depending on the data origin to be used.
+
+- An agnostic factory (it knows now what objects it creates)
+    - /repository/payment-gateway/payment-gateway.origin.types.ts - Define types, here are the import statements   
+   - /repository/payment-gateway/payment-gateway.factory.ts - Factory to generate data origins
+- A config file
     application.config.ts
-- Usando los tipos definidos, podemos configurar la aplicación en el fichero de configuración para que utilice uno u otro objeto de la factoría
 
 
-A partir de aquí, para integrar nuevos orígenes de datos:
+From here, we can integrate new data origins:
 
-- Escribirlos implementando la interfaz
-- Agregarlos al fichero de definiciones de tipos para la factoría
+- Write them IMPLEMENTING the interface
+- Add them to the definition types file
 
-Así, tenemos en nuestro fichero de configuración (usamos dotenv):
+Thus, in our config file we have (uses dotenv):
 
 ```
 import { paymentGatewayDataOriginsKeys } from "./src/repository/payment-gateway/payment-gateway.origin.types"
@@ -66,30 +67,27 @@ export default {
 }
 ```
 
-y estamos usando la clave 2 (literal, se puede definir como cadena también), para decirle que use el segundo origen de datos.
-Cuando implementemos uno nuevo, o lo queramos cambiar, simplemente cambiamos este valor.
-
-Para todas las factorías que implementen el modelo anteriormente descrito, esto es usable, y se puede, de esta forma, inyectar nuevos módulos de forma que no haya que tocar nada de código en las clases que vayan a usar lo que devuelven las factorías, ni tampoco en las factorías en si mismas, pues los objetos se conforman a la interfaz fuertemente
-tipada, y por tanto, su lógica interna es irrelevante desde el punto de vista de quien lo use.
+and we define the second data origin in the config file.
+If we want to use another one, we can change it here.
 
 
-## Rutas aplicación
+## Application routes
 
-Para todas las rutas es requerido un header de autentificación: 
+All routes require an authentication header:
 
 ```
 Authentication: 1234
 ```
 
-Esto emula lo que en producción sería una auténtica securización de los endpoints.
+This emulates a real production authentication
 
 - POST /payment
 
-    Requiere un Request Body de tipo Payment , devuelve el mismo objeto con el campo .completed a true
+    Requires a body of type Payment, returns the same entity with the field .completed to true    
 
-Ejemplo:
+Sample:
 
-Enviamos:
+Send:
 
 ```
 {
@@ -97,7 +95,7 @@ Enviamos:
 }
 ```
 
-Recibimos:
+Receive:
 
 ```
 Status Code: 200
@@ -110,12 +108,12 @@ Status Code: 200
 
 - POST /reimbursement
 
-    Requiere un Request Body de tipo Reimbursement, devuelve el mismo objeto con el campo .completed a true
+    Requires a body of type Reimbursement, , returns the same entity with the field .completed to true     
 
 
-Ejemplo:
+Sample:
 
-Enviamos:
+Send:
 
 ```
 {
@@ -123,7 +121,7 @@ Enviamos:
 }
 ```
 
-Recibimos:
+Receive:
 
 ```
 Status Code: 200
@@ -133,7 +131,7 @@ Status Code: 200
 }
 ```
 
-Si no se les pasa correctamente el cuerpo, devuelven:
+If body is not valid, they return:
 
 ```
 Status Code: 400
@@ -142,7 +140,7 @@ Status Code: 400
 }
 ```
 
-Y en el caso de que no se les pase bien el token de autentificación en las cabeceras de la petición:
+And if header authentication is not correctly passed:
 
 ```
 Status Code: 403
@@ -154,9 +152,5 @@ Status Code: 403
 
 ## Tests
 
-Contiene tests de las rutas, la factoría y uno de los orígenes de datos. En producción debería tener muchos más tests, pero para la prueba
-creo que es suficiente (espero, al menos)
-
-## Contacto
-
-Si hay cualquier duda o algo no se entience, mandadme un correo ¡¡ Gracias !!
+It has some testing. Requires more, but the exercise was explicitly to implement the architexture, leaving testing as a secondary concern.
+Yeah, i know.
